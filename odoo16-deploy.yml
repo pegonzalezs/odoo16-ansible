@@ -1,0 +1,16 @@
+---
+- hosts: philips
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  module_defaults:
+    ansible.builtin.apt:
+      force_apt_get: true
+  remote_user: administrator
+  become: true
+  become_method: sudo
+  roles:
+    - common
+    - odoo
+    - postgresql
+    - wkhtmltopdf
+    - nginx

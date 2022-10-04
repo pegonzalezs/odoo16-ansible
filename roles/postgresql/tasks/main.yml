@@ -1,0 +1,93 @@
+- name: Ensure the locale exists
+  locale_gen:
+    name: en_US.UTF-8
+    state: present
+  become: true
+
+- name: Install Postgres pre-requisites
+  ansible.builtin.apt:
+    name: [
+      'lsb-release',
+    ]
+  become: true
+
+- name: postgresql key
+  ansible.builtin.apt_key:
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+    state: present
+  become: true
+
+- name: create variable
+  ansible.builtin.command: bash -c "echo \"deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main\" "
+  register: repo_line
+
+- name: populate postgres repo
+  ansible.builtin.debug:
+    msg: "{{ repo_line.stdout }}"
+
+- name: add postgresql repo
+  ansible.builtin.apt_repository:
+    repo: "{{ repo_line.stdout }}"
+    state: present
+  become: true
+
+- name: Install Postgres packages
+  ansible.builtin.apt:
+    name: [
+      'gnupg2',
+      'postgresql-14',
+      'postgresql-contrib-14',
+      'postgresql-common',
+      'postgresql-client-14',
+      'libpq-dev',
+    ]
+  become: true
+
+- name: Enable Service Postgresql
+  ansible.builtin.service:
+    name: 'postgresql'
+    enabled: true
+    state: started
+    daemon_reload: y
+  become: true
+
+- name: Make sure psycopg2 is installed
+  ansible.builtin.pip:
+    name: psycopg2
+    state: present
+  become: true
+
+- name: Wait for port 5432 (postgresql)to become open on the host
+  ansible.builtin.wait_for:
+    port: 5432
+    delay: 5
+  become: true
+
+- name: PostgreSQL - Add the config db Odoo user
+  become: true
+  become_user: postgres
+  postgresql_user:
+    name: '{{ odoo_config_db_user }}'
+    password: '{{ odoo_config_db_passwd_crypt }}'
+    encrypted: true
+    role_attr_flags: '{{ odoo_postgresql_user_role_attr }}'
+
+- name: Local "pg_hba.conf"
+  ansible.builtin.blockinfile:
+    dest: /etc/postgresql/14/main/pg_hba.conf
+    block: |
+      local   all             postgres                                peer
+
+      # TYPE  DATABASE        USER            ADDRESS                 METHOD
+
+      # "local" is for Unix domain socket connections only
+      local   all             all                                     trust
+      # IPv4 local connections:
+      host    all             all             127.0.0.1/32            md5
+      # IPv6 local connections:
+      host    all             all             ::1/128                 md5
+      # Allow replication connections from localhost, by a user with the
+      # replication privilege.
+      local   replication     all                                     trust
+      host    replication     all             127.0.0.1/32            md5
+      host    replication     all             ::1/128                 md5

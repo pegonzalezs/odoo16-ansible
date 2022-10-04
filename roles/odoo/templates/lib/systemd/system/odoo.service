@@ -1,0 +1,20 @@
+[Unit]
+Description=ODOO Application Server
+After=network.service
+
+[Install]
+Alias=odoo-server.service
+
+[Service]
+Type=simple
+PermissionsStartOnly=true
+User=odoo
+Group=odoo
+SyslogIdentifier=odoo-server
+PIDFile=/run/odoo/odoo.pid
+ExecStartPre=/usr/bin/install -d -m755 -o odoo -g odoo /run/odoo
+ExecStart=/opt/odoo/git_repositories/odoo/odoo-bin -c /etc/odoo-server.conf --pid=/run/odoo/odoo.pid --logfile=/var/log/odoo/odoo-server.log
+ExecStop=/bin/kill /run/odoo/odoo.pid
+
+[Install]
+WantedBy=multi-user.target

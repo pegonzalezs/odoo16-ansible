@@ -1,0 +1,37 @@
+# apt Upgrade
+- name: Perform a apt clean
+  ansible.builtin.apt:
+    autoclean: true
+  become: true
+
+- name: Getting same sources in all debian bullseye servers
+  ansible.builtin.template:
+    src: files/sources.list
+    dest: /etc/apt/sources.list
+    mode: 0755
+  become: true
+
+- name: Ensure the apt package index is up to Date
+  ansible.builtin.apt:
+    update_cache: true
+    force_apt_get: true
+    cache_valid_time: true
+  become: true
+
+# apt Usual Packages
+- name: Install basic apt packages with_items
+  ansible.builtin.apt:
+    name: [
+      'nano',
+      'git',
+      'unzip',
+      'curl',
+      'wget',
+      'gcc',
+      'rsync',
+    ]
+  become: true
+
+- name: locales | set
+  ansible.builtin.command: locale-gen LANG=en_US.UTF-8
+  become: true

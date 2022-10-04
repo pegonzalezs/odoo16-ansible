@@ -1,0 +1,14 @@
+configparser==5.0.0
+unidecode
+xmltodict
+simplejson
+openupgradelib
+phonenumbers
+python-docx
+requests
+ERPpeek==1.7.1
+pre-commit
+setuptools
+wheel
+odoo-rpc-client
+freezegun

@@ -1,0 +1,184 @@
+# apt Usual Packages
+- name: Install Odoo Dependencies
+  ansible.builtin.apt:
+    name: [
+      'python3',
+      'python3-pip',
+      'python3.9-dev',
+      'libxml2-dev',
+      'libxslt1-dev',
+      'libldap2-dev',
+      'libsasl2-dev',
+      'libtiff5-dev',
+      'libjpeg62-turbo-dev',  # - alternative of libjpeg8-dev
+      'libopenjp2-7-dev',
+      'zlib1g-dev',
+      'libfreetype6-dev',
+      'liblcms2-dev',
+      'libwebp-dev',
+      'libharfbuzz-dev',
+      'libfribidi-dev',
+      'libxcb1-dev',
+      'libpq-dev',
+      'g++',
+      'ufw',
+    ]
+  become: true
+
+## See: https://stackoverflow.com/a/37096534/100134
+- name: Ensure setfacl support is present.
+  ansible.builtin.package: name=acl
+  become: true
+
+- name: Change Odoo Home Directory and command
+  ansible.builtin.user:
+    name: '{{ odoo_user }}'
+    password: '{{ odoo_user }}'
+    home: '{{ odoo_home }}'
+    shell: /bin/bash
+    append: true
+  become: true
+
+- name: adding existing user {{ ansible_ssh_user }} to group odoo
+  ansible.builtin.user:
+    name: '{{ ansible_ssh_user }}'
+    groups: odoo
+    append: true
+  become: true
+
+- name: Set Local on .bashrc of odoo user
+  ansible.builtin.blockinfile:
+    dest: /opt/odoo/.bashrc
+    block: |
+      LC_ALL="en_US.utf8"
+      export LC_ALL
+  become: true
+
+- name: Enable write access on odoo folder to group odoo
+  ansible.builtin.file:
+    path: '{{ odoo_home }}'
+    mode: u=rwX,g=rX,o=rX
+    recurse: true
+    owner: "{{ odoo_user }}"
+    group: "{{ odoo_user }}"
+  become: true
+
+- name: Create odoo pid folder
+  ansible.builtin.file:
+    path: /run/odoo
+    state: directory
+    mode: 0644
+    owner: '{{ odoo_user }}'
+    group: '{{ odoo_user }}'
+  become: true
+
+- name: Creato odoo log folder
+  ansible.builtin.file:
+    path: /var/log/odoo
+    state: directory
+    mode: 0744
+    owner: "{{ odoo_user }}"
+    group: "{{ odoo_user }}"
+  become: true
+
+- name: Ensure github.com is a known host
+  ansible.builtin.lineinfile:
+    dest: "{{ odoo_home }}/.ssh/known_hosts"
+    create: true
+    state: present
+    line: "{{ lookup('pipe', 'ssh-keyscan -t rsa ssh.github.com') }}"
+    regexp: "^github\\.com"
+    mode: 0644
+    owner: "{{ odoo_user }}"
+    group: "{{ odoo_user }}"
+  become: true
+  become_user: odoo
+
+# FUNID Special Python Needs
+- name: Set environment-requirements
+  ansible.builtin.template: src=files/environment-requirements.txt dest=/tmp/environment-requirements.txt mode=0644
+  become: true
+  become_user: odoo
+
+- name: Install Environment Requirements
+  vars:
+    allow_world_readable_tmpfiles: true
+  ansible.builtin.pip:
+    executable: pip3
+    requirements: /tmp/environment-requirements.txt
+    extra_args: --user
+  become: true
+  become_user: odoo
+
+- name: Clone all needed repositories
+  ansible.builtin.git:
+    repo: "https://github.com/odoo/odoo.git"
+    version: "{{ odoo_version | string }}"
+    dest: "{{ odoo_home }}/git_repositories/{{ item }}"
+    force: true
+  become: true
+  become_user: odoo
+  with_items:
+    - odoo
+
+# Install Odoo Pip3 Requirements
+- name: Install Environment Requirements
+  vars:
+    allow_world_readable_tmpfiles: true
+  ansible.builtin.pip:
+    executable: pip3
+    requirements: "{{ odoo_home }}/git_repositories/odoo/requirements.txt"
+    extra_args: --user
+  become: true
+  become_user: odoo
+
+- name: Create Service
+  ansible.builtin.template: src=templates/lib/systemd/system/odoo.service dest=/lib/systemd/system/odoo.service mode=644
+  notify:
+    - reload systemctl
+  become: true
+
+- name: Create Configuration Files
+  ansible.builtin.template:
+    src: files/odoo-server.conf
+    dest: /etc/odoo-server.conf
+    mode: 0644
+    owner: "{{ odoo_user }}"
+    group: "{{ odoo_user }}"
+  become: true
+
+- name: Start Odoo Service
+  ansible.builtin.service: name=odoo.service state=started enabled=true
+  become: true
+
+- name: Enabling UFW, allowing all traffic
+  community.general.ufw:
+    state: enabled
+
+- name: Update firewall add http
+  ansible.builtin.command: ufw allow http
+  become: true
+
+- name: Update firewall add http
+  ansible.builtin.command: ufw allow https
+  become: true
+
+- name: Update firewall add ssh port
+  ansible.builtin.command: ufw allow ssh
+  become: true
+
+- name: Update firewall add 8069 port
+  ansible.builtin.command: ufw allow 8069
+  become: true
+
+- name: Update firewall add ssh port
+  ansible.builtin.command: ufw allow 2222
+  become: true
+
+- name: Update firewall add ssh port
+  ansible.builtin.command: ufw allow 8072
+  become: true
+
+- name: Reload firewall
+  ansible.builtin.command: ufw reload
+  become: true

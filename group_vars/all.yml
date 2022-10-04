@@ -1,0 +1,16 @@
+# Odoo
+odoo_user: odoo
+odoo_home: /opt/odoo
+odoo_version: 16.0
+
+# PostgreSQL
+odoo_config_db_user: odoo
+odoo_config_db_passwd: vDt1AtwBvb
+odoo_config_db_passwd_crypt: C3siIT/i7eAdZPUdbsopCYAQJp4YEHSl
+odoo_postgresql_user_role_attr: CREATEDB,SUPERUSER
+odoo_postgresql_extensions:
+  - unaccent
+
+## ANSIBLE
+ansible_python_interpreter: /usr/bin/python3
+

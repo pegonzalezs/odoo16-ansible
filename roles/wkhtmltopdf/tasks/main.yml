@@ -1,0 +1,22 @@
+# apt Usual Packages
+- name: Install wkthmltopdf Dependencies
+  ansible.builtin.apt:
+    name: [
+      'xfonts-75dpi',
+      'libturbojpeg0',
+    ]
+  become: true
+
+- name: Get Wkhtmltopdf
+  ansible.builtin.get_url:
+    url: "https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.buster_amd64.deb"
+    dest: "/tmp/wkhtmltox_0.12.5-1.buster_amd64.deb"
+    owner: odoo
+    group: odoo
+    mode: 0644
+  become: true
+
+- name: Install Wkhtmltopdf
+  ansible.builtin.apt:
+    deb: /tmp/wkhtmltox_0.12.5-1.buster_amd64.deb
+  become: true
