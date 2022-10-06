@@ -1,0 +1,37 @@
+- name: Install NGINX
+  ansible.builtin.apt:
+    name: [
+         'nginx',
+         'python3-certbot-nginx',
+    ]
+  become: true
+
+- name: NGINX | Create ssl folder
+  ansible.builtin.file:
+    path: /etc/nginx/ssl
+    state: directory
+    group: 'root'
+    owner: 'www-data'
+    mode: '710'
+
+- name: NGINX | Sites available
+  template: src=templates/etc/nginx/sites-available/odoo dest=/etc/nginx/sites-available/{{ site_name }}
+
+- name: Create site symlink in sites_enabled
+  ansible.builtin.file:
+    src: "/etc/nginx/sites-available/{{ site_name }}"
+    dest: "/etc/nginx/sites-enabled/{{ site_name }}"
+    state: link
+    group: 'root'
+    owner: 'www-data'
+
+- name: Remove file (delete file)
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  become: true
+
+- name: restart nginx
+  service:
+    name: nginx
+    state: restarted

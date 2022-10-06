@@ -11,6 +11,8 @@ odoo_postgresql_user_role_attr: CREATEDB,SUPERUSER
 odoo_postgresql_extensions:
   - unaccent
 
-## ANSIBLE
+# ANSIBLE
 ansible_python_interpreter: /usr/bin/python3
 
+# SITE
+site_name: odoo-ethicalcyber.ch

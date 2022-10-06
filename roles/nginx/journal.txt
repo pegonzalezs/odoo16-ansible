@@ -1,0 +1,22 @@
+- Following my own doc in
+https://docs.google.com/document/d/1rvVe-Pafdeu9uH_HSVyQUMbsbEipJHkIw4zkmPgHydk/edit
+
+- Set Up proy_mode = True in /etc/odoo-server.conf
+
+- Create Certbot certificates
+sudo certbot --nginx -d odoo-ethicalcyber.ch -d www.odoo-ethicalcyber.ch
+
+- Link to the correct ssl certificates inside nginx/sites-enabled
+
+ssl_certificate /etc/letsencrypt/live/odoo-ethicalcyber.ch/fullchain.pem;
+ssl_certificate_key /etc/letsencrypt/live/odoo-ethicalcyber.ch/privkey.pem;
+ 
+- delete default in sites-enabled
+
+- Test Certificate renovation
+sudo certbot renew --dry-run
+
+
+
+
+
