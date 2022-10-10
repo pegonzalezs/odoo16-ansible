@@ -5,7 +5,7 @@ odoo_version: 16.0
 
 # PostgreSQL
 odoo_config_db_user: odoo
-odoo_config_db_passwd: vDt1AtwBvb
+odoo_config_db_passwd: YTk0MGVhZDc2YjFmMTFlZTI0MTFkYmM3
 odoo_config_db_passwd_crypt: C3siIT/i7eAdZPUdbsopCYAQJp4YEHSl
 odoo_postgresql_user_role_attr: CREATEDB,SUPERUSER
 odoo_postgresql_extensions:
@@ -15,4 +15,4 @@ odoo_postgresql_extensions:
 ansible_python_interpreter: /usr/bin/python3
 
 # SITE
-site_name: odoo-ethicalcyber.ch
+site_name: your-site.com
