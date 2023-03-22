@@ -1,5 +1,5 @@
 ---
-- hosts: local-dev
+- hosts: campus
   module_defaults:
     ansible.builtin.apt:
       force_apt_get: true
@@ -9,6 +9,7 @@
   roles:
     - common
     - odoo
+    - enterprise
     - postgresql
     - wkhtmltopdf
-    - nginx
+    #- nginx

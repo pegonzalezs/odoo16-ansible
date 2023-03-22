@@ -1,0 +1,11 @@
+Host enterprise
+  HostName github.com
+  User git
+  IdentityFile /opt/odoo/.ssh/id_rsa_enterprise
+  IdentitiesOnly yes
+
+Host odoo
+  HostName github.com
+  User git
+  IdentityFile /opt/odoo/.ssh/id_rsa_odoo
+  IdentitiesOnly yes

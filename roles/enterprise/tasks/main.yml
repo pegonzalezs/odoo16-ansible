@@ -1,0 +1,36 @@
+- name: Ensure .ssh/config is present on the server
+  ansible.builtin.template:
+    src: files/ssh_config
+    dest: "{{ odoo_home }}/.ssh/config"
+    mode: 0600
+    owner: "{{ odoo_user }}"
+    group: "{{ odoo_user }}"
+  become: true
+  become_user: odoo
+
+- name: Ensure all repository keys are in server
+  ansible.builtin.template:
+    src: files/id_rsa_{{ item }}
+    dest: "{{ odoo_home }}/.ssh/id_rsa_{{ item }}"
+    mode: 0600
+    owner: "{{ odoo_user }}"
+    group: "{{ odoo_user }}"
+  become: true
+  become_user: odoo
+  with_items:
+    - odoo
+    - enterprise
+  
+- name: Clone all needed repositories
+  ansible.builtin.git:
+    repo: "git@{{ item }}:FernUni-UniDistance/{{ item }}.git"
+    version: "{{ odoo_version | string }}"
+    dest: "{{ odoo_home }}/git_repositories/{{ item }}"
+    accept_hostkey: true
+    key_file: /opt/odoo/.ssh/id_rsa_{{ item }}
+    force: true
+  become: true
+  become_user: odoo
+  with_items:
+    - odoo
+    - enterprise
