@@ -2,7 +2,6 @@
   ansible.builtin.apt:
     name: [
          'nginx',
-         'python3-certbot-nginx',
     ]
   become: true
 
@@ -16,6 +15,9 @@
 
 - name: NGINX | Sites available
   template: src=templates/etc/nginx/sites-available/odoo dest=/etc/nginx/sites-available/{{ site_name }}
+
+- name: NGINX | SSL Certificates
+  template: src=templates/etc/nginx/ssl dest=/etc/nginx/ssl
 
 - name: Create site symlink in sites_enabled
   ansible.builtin.file:

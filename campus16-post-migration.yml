@@ -1,0 +1,22 @@
+---
+- hosts: campus
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  module_defaults:
+    ansible.builtin.apt:
+      force_apt_get: true
+  remote_user: administrator
+  become: true
+  become_method: sudo
+  vars_prompt:
+    - name: "db_name"
+      prompt: "Introduce the name of the dabase restored by Odoo"
+      private: false
+    - name: "backup_file"
+      prompt: "If restore from file needed, introduce complete file path"
+      private: false
+    - name: "production"
+      prompt: "Are you running this script in future production server [yes/no]?"
+      private: false
+  roles:
+    - post_migration

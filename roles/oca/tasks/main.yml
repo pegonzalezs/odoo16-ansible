@@ -1,0 +1,71 @@
+- name: Ensure FernUni Odoo deploy key is present on the server.
+  ansible.builtin.template:
+    src: files/id_rsa_oca
+    dest: "{{ odoo_home }}/.ssh/id_rsa_oca"
+    mode: 0400
+    owner: odoo
+    group: odoo
+  become: true
+
+# Getting OCA repos
+- name: Clone FernUni OCA Repository + Submodules
+  ansible.builtin.git:
+    repo: git@github.com:FernUni-UniDistance/oca_repositories.git
+    version: "{{ odoo_version }}"
+    dest: "{{ odoo_home }}/oca_repositories"
+    accept_hostkey: true
+    key_file: "/opt/odoo/.ssh/id_rsa_oca"
+    force: true
+  become: true
+  become_user: odoo
+
+# command Command to Update Submodules
+- name: Update all submodules
+  ansible.builtin.command: chdir=/opt/odoo/oca_repositories git submodule update --init
+  tags:
+    - skip_ansible_lint
+  become: true
+  become_user: odoo
+
+# Getting OCA modules
+- name: Creat oca folder
+  ansible.builtin.file:
+    path: "{{ odoo_home }}/oca_modules"
+    state: directory
+    mode: 0775
+    owner: '{{ odoo_user }}'
+    group: '{{ odoo_user }}'
+  become: true
+
+# SymLinks
+- name: Create Symlink for account_statement_import
+  ansible.builtin.file:
+    src: "{{ odoo_home }}/oca_repositories/bank-statement-import/account_statement_import/"
+    dest: "{{ odoo_home }}/oca_modules/account_statement_import"
+    state: link
+  become: true
+  become_user: odoo
+
+- name: Create Symlink for account_statement_import_camt
+  ansible.builtin.file:
+    src: "{{ odoo_home }}/oca_repositories/bank-statement-import/account_statement_import_camt/"
+    dest: "{{ odoo_home }}/oca_modules/account_statement_import_camt"
+    state: link
+  become: true
+  become_user: odoo
+
+- name: Create Symlink for account_statement_import_camt54
+  ansible.builtin.file:
+    src: "{{ odoo_home }}/oca_repositories/bank-statement-import/account_statement_import_camt54/"
+    dest: "{{ odoo_home }}/oca_modules/account_statement_import_camt54"
+    state: link
+  become: true
+  become_user: odoo
+
+- name: Web Advanced search
+  ansible.builtin.file:
+    src: "{{ odoo_home }}/oca_repositories/web/web_advanced_search"
+    dest: "{{ odoo_home }}/oca_modules/web_advanced_search"
+    state: link
+  become: true
+  become_user: odoo

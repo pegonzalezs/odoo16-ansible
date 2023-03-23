@@ -1,0 +1,18 @@
+---
+- hosts: campus
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  module_defaults:
+    ansible.builtin.apt:
+      force_apt_get: true
+  remote_user: administrator
+  become: true
+  become_method: sudo
+  vars:
+    - db_name: campus
+  vars_prompt:
+    - name: "production"
+      prompt: "Are you doing a production migration? [yes/no]?"
+      private: false
+  roles:
+    - pre_migration

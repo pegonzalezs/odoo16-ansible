@@ -1,0 +1,145 @@
+################################################################
+# Manual STEPS before running a migration:
+# Update 15.0-dev with latest 15.0
+# remove folder /opt/odoo/.local/share/Odoo/filestore/fsch_test
+# drop database fsch_test
+# remove previous backups in /opt/odoo/backups
+###################################################################
+
+- name: Stop Odoo Service
+  ansible.builtin.service: name=odoo.service state=stopped enabled=true
+  become: true
+
+# To avoid next ssh issue
+# The authenticity of host '[upgrade.odoo.com]:53824 ([34.76.240.118]:53824)' can't be established.
+- name: Recognise upgrade.odoo.com
+  ansible.builtin.command: ssh-keyscan upgrade.odoo.com >> $HOME/.ssh/known_hosts
+  become: true
+  become_user: administrator
+
+# The authenticity of host '[upgrade.odoo.com]:57183 ([34.76.240.118]:53824)' can't be established.
+- name: Recognise upgrade.odoo.com
+  ansible.builtin.command: ssh-keyscan upgrade.odoo.com >> $HOME/.ssh/known_hosts
+  become: true
+  become_user: administrator
+
+# To avoid next ssh issue
+# The authenticity of host '[upgrade.odoo.com]:53824 ([34.76.240.118]:53824)' can't be established.
+- name: Recognise campus.fernuni.ch
+  ansible.builtin.command: ssh-keyscan -p 2222 campus.fernuni.ch >> $HOME/.ssh/known_hosts
+  become: true
+  become_user: administrator
+
+# Get last backup name
+- name: Get last backup name
+  ansible.builtin.command: ssh -p 2222 administrator@campus.fernuni.ch "sudo ls -Art /var/lib/pgsql/9.5/backups | tail -n 1"
+  register: backup_file
+  become: true
+  become_user: administrator
+
+- name: Build rsync command to download file {{ backup_file.stdout }}
+  ansible.builtin.set_fact:
+    rsync_cmd: >
+      rsync -av --ignore-existing -e 'ssh -p 2222' --progress
+      administrator@campus.fernuni.ch:/var/lib/pgsql/9.5/backups/{{ backup_file.stdout }} /opt/odoo/backups/
+  become: true
+  become_user: administrator
+
+- name: Populate rsync command
+  ansible.builtin.debug:
+    var: rsync_cmd
+
+- name: Rsync to download file {{ backup_file.stdout }}
+  ansible.builtin.command: "{{ rsync_cmd }}"
+  become: true
+  become_user: administrator
+
+- name: Set odoo permissions on file {{ backup_file.stdout }}
+  ansible.builtin.file:
+    path: "{{ odoo_home }}/backups/{{ backup_file.stdout }}"
+    owner: '{{ odoo_user }}'
+    group: '{{ odoo_user }}'
+  become: true
+
+- name: Dropdb {{ db_name }}
+  ansible.builtin.command: dropdb --if-exists {{ db_name }} --force
+  become: true
+  become_user: odoo
+
+- name: Createdb {{ db_name }}
+  ansible.builtin.command: createdb -E UTF-8 {{ db_name }}
+  become: true
+  become_user: odoo
+
+# Use shell in case command includes a pipe |. Command will not work
+- name: Restore database {{ db_name }}
+  ansible.builtin.shell: "gunzip -c {{ odoo_home }}/backups/{{ backup_file.stdout }} | psql -v ON_ERROR_STOP=1 {{ db_name }}"
+  tags:
+    - skip_ansible_lint
+  become: true
+  become_user: odoo
+
+# Get last FILESTORE backup name
+- name: Get from prod server last filestore backup name
+  ansible.builtin.command: ssh -p 2222 administrator@campus.fernuni.ch "sudo ls -Art /home/odoo/backups/filestore | tail -n 1"
+  register: filestore_backup_file
+  become: true
+  become_user: administrator
+
+- name: Build rsync command
+  ansible.builtin.set_fact:
+    rsync_cmd: >
+      rsync -av --ignore-existing -e 'ssh -p 2222' --progress
+      administrator@campus.fernuni.ch:/home/odoo/backups/filestore/{{ filestore_backup_file.stdout }} /opt/odoo/backups/
+  become: true
+  become_user: administrator
+
+- name: Populate rsync command
+  ansible.builtin.debug:
+    var: rsync_cmd
+
+- name: Rsync... downloading file {{ filestore_backup_file.stdout }}
+  ansible.builtin.command: "{{ rsync_cmd }}"
+  become: true
+  become_user: administrator
+
+- name: Set odoo ownership on filestore backup file {{ filestore_backup_file.stdout }}
+  ansible.builtin.file:
+    path: "{{ odoo_home }}/backups/{{ filestore_backup_file.stdout }}"
+    owner: '{{ odoo_user }}'
+    group: '{{ odoo_user }}'
+  become: true
+
+# default filestore folder
+- name: Get filestore folder name based on environment prod/staging
+  ansible.builtin.set_fact:
+    filestore_folder: /opt/odoo/.local/share/Odoo/filestore/{{ db_name }}
+
+- name: Create filestore folder {{ filestore_folder }}
+  ansible.builtin.file:
+    path: "{{ filestore_folder }}"
+    state: directory
+    owner: '{{ odoo_user }}'
+    group: '{{ odoo_user }}'
+    mode: 0775
+  become: true
+  become_user: odoo
+
+- name: Restoring filestore in {{ filestore_folder }}
+  ansible.builtin.shell: "tar -xvzf /opt/odoo/backups/{{ filestore_backup_file.stdout }} --strip-components=7 -C {{ filestore_folder }}"
+  tags:
+    - skip_ansible_lint
+  become: true
+  become_user: odoo
+
+- name: Prints test Migration Script command
+  when: not (production | bool)
+  ansible.builtin.debug:
+    msg:
+      - "Please execute as odoo user in /backup folder next command: python3 <(curl -s https://upgrade.odoo.com/upgrade) test -d campus -t 16.0"
+
+- name: Prints production Migration Script command
+  when: (production | bool)
+  ansible.builtin.debug:
+    msg:
+      - "Please execute as odoo user in /backup folder next command: python3 <(curl -s https://upgrade.odoo.com/upgrade) production -d campus -t 16.0"

@@ -1,0 +1,61 @@
+- name: Stop Odoo Service
+  ansible.builtin.service: name=odoo.service state=stopped enabled=true
+  become: true
+
+- name: Drop, Create and Restore database
+  block:
+    - name: Dropdb {{ db_name }}
+      ansible.builtin.command: dropdb --if-exists {{ db_name }} --force
+      become: true
+      become_user: odoo
+
+    - name: Createdb {{ db_name }}
+      ansible.builtin.command: createdb -E UTF-8 {{ db_name }}
+      become: true
+      become_user: odoo
+
+    - name: Restoring database from file {{ backup_file }}
+      ansible.builtin.shell: "gunzip -c {{ backup_file }} | psql -v ON_ERROR_STOP=1 {{ db_name }}"
+      tags:
+        - skip_ansible_lint
+      become: true
+      become_user: odoo
+  when: backup_file
+
+# Dump does not exist
+- name: Check if dump from Odoo database restore exists
+  ansible.builtin.stat:
+    path: "{{ odoo_home }}/backups/{{ db_name }}.sql.gz"
+  register: backup_upgrade
+
+# Dump database just as it comes from Odoo Upgrade process.
+- name: Create database backup if does not exist from upgrade of Odoo {{ db_name }}
+  when: not backup_upgrade.stat.exists
+  ansible.builtin.shell: pg_dump {{ db_name }} > {{ odoo_home }}/backups/{{ db_name }}.sql
+  become: true
+  become_user: odoo
+
+- name: Zip it
+  when: not backup_upgrade.stat.exists
+  ansible.builtin.command: gzip -f {{ odoo_home }}/backups/{{ db_name }}.sql
+  become: true
+  become_user: odo
+
+- name: Delete Odoo Upgrade log file
+  ansible.builtin.file:
+    path: /var/log/odoo/odoo_after_upgrade.txt
+    state: absent
+
+- name: Copy log to backups folder (same as Odoo does)
+  ansible.builtin.command: cp /var/log/odoo/odoo_after_upgrade.txt {{ odoo_home }}/backups/
+  become: true
+  become_user: odoo
+
+- name: Start odoo service
+  ansible.builtin.debug:
+    msg: |
+      Congratulations Campus 16 is finally here!!!
+      Last manual steps:
+      1) rename campus db to campus_v9 AND rename Odoo db to campus
+      2) rename filestore from campus to campus_v9 and from campus_* to campus
+      3) Enjoy Campus 16 starting the odoo service

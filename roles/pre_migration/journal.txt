@@ -1,0 +1,580 @@
+BLOCKING ISSUE 1
+
+=======================================================================================
+# 2022-09-19 08:21:22,767 8862 INFO db_380879 odoo.upgrade.base.tests.test_mock_crawl: ====================================================================== 
+# 2022-09-19 08:21:22,767 8862 ERROR db_380879 odoo.upgrade.base.tests.test_mock_crawl: FAIL: TestCrawler.test_check
+# Traceback (most recent call last):
+#   File "/tmp/tmpcu2evij8/migrations/testing.py", line 211, in test_check
+#     self.check(value)
+#   File "/tmp/tmpcu2evij8/migrations/base/tests/test_mock_crawl.py", line 120, in check
+#     self.assertFalse(diff, msg)
+# AssertionError: [('fsch_customer_hr.employee_payslip_internal_user_menu', 4298, 'Employees > Employee Payslips', 500), ('hr_payroll.menu_hr_payroll_employee_payslips', 4119, 'Payroll > Payslips > All Payslips', 2866), ('bt_swissdec.menu_department_tree', 3115, 'Employees > Payroll > Employee Payslips', 500), ('hr_payroll.menu_hr_payroll_employee_payslips_to_pay', 4177, 'Payroll > Payslips > To Pay', 2953)] is not false : At least one menu or view working before upgrade is not working after upgrade.
+
+# ('fsch_customer_hr.employee_payslip_internal_user_menu', 4298, 'Employees > Employee Payslips', 500):
+#  Traceback (most recent call last):
+#    File "/tmp/tmpcu2evij8/migrations/base/tests/test_mock_crawl.py", line 220, in crawl_menu
+#     self.mock_action(action_vals)
+#    File "/tmp/tmpcu2evij8/migrations/base/tests/test_mock_crawl.py", line 290, in mock_action
+#     views = get_views(
+#    File "/home/odoo/src/odoo/15.0/odoo/models.py", line 1629, in load_views
+#     result['fields_views'] = {
+#    File "/home/odoo/src/odoo/15.0/odoo/models.py", line 1630, in <dictcomp>
+#     v_type: self.fields_view_get(v_id, v_type if v_type != 'list' else 'tree',
+#    File "/home/odoo/src/enterprise/15.0/hr_payroll/models/hr_payslip.py", line 816, in fields_view_get
+#     res = super().fields_view_get(view_id, view_type, toolbar, submenu)
+#    File "/home/odoo/src/odoo/15.0/addons/web/models/models.py", line 249, in fields_view_get
+#     r = super().fields_view_get(view_id, view_type, toolbar, submenu)
+#    File "/home/odoo/src/odoo/15.0/odoo/models.py", line 1713, in fields_view_get
+#     result = self._fields_view_get(view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu)
+#    File "/home/odoo/src/odoo/15.0/odoo/models.py", line 1675, in _fields_view_get
+#     result['arch'] = view.get_combined_arch()
+#    File "/home/odoo/src/odoo/15.0/odoo/addons/base/models/ir_ui_view.py", line 954, in get_combined_arch
+#     return etree.tostring(self._get_combined_arch(), encoding='unicode')
+#    File "/home/odoo/src/odoo/15.0/odoo/addons/base/models/ir_ui_view.py", line 984, in _get_combined_arch
+#     arch = root.with_prefetch(tree_views._prefetch_ids)._combine(hierarchy)
+#    File "/home/odoo/src/odoo/15.0/odoo/addons/base/models/ir_ui_view.py", line 925, in _combine
+#     combined_arch = view.apply_inheritance_specs(combined_arch, arch)
+#    File "/home/odoo/src/odoo/15.0/odoo/addons/base/models/ir_ui_view.py", line 862, in apply_inheritance_specs
+#     self._raise_view_error(str(e), specs_tree)
+#    File "/home/odoo/src/odoo/15.0/odoo/addons/base/models/ir_ui_view.py", line 739, in _raise_view_error
+#     raise err from from_exception
+#  ValueError: Element '<xpath expr="//page[@name=&#39;accounting_details&#39;]//field[@name=&#39;date&#39;]">' cannot be located in parent view
+
+
+
+# ('hr_payroll.menu_hr_payroll_employee_payslips', 4119, 'Payroll > Payslips > All Payslips', 2866):
+#  Traceback (most recent call last):
+#    File "/tmp/tmpcu2evij8/migrations/base/tests/test_mock_crawl.py", line 220, in crawl_menu
+#     self.mock_action(action_vals)
+#    File "/tmp/tmpcu2evij8/migrations/base/tests/test_mock_crawl.py", line 290, in mock_action
+#     views = get_views(
+#    File "/home/odoo/src/odoo/15.0/odoo/models.py", line 1629, in load_views
+#     result['fields_views'] = {
+#    File "/home/odoo/src/odoo/15.0/odoo/models.py", line 1630, in <dictcomp>
+#     v_type: self.fields_view_get(v_id, v_type if v_type != 'list' else 'tree',
+#    File "/home/odoo/src/enterprise/15.0/hr_payroll/models/hr_payslip.py", line 816, in fields_view_get
+#     res = super().fields_view_get(view_id, view_type, toolbar, submenu)
+#    File "/home/odoo/src/odoo/15.0/addons/web/models/models.py", line 249, in fields_view_get
+#     r = super().fields_view_get(view_id, view_type, toolbar, submenu)
+#    File "/home/odoo/src/odoo/15.0/odoo/models.py", line 1713, in fields_view_get
+#     result = self._fields_view_get(view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu)
+#    File "/home/odoo/src/odoo/15.0/odoo/models.py", line 1675, in _fields_view_get
+#     result['arch'] = view.get_combined_arch()
+#    File "/home/odoo/src/odoo/15.0/odoo/addons/base/models/ir_ui_view.py", line 954, in get_combined_arch
+#     return etree.tostring(self._get_combined_arch(), encoding='unicode')
+#    File "/home/odoo/src/odoo/15.0/odoo/addons/base/models/ir_ui_view.py", line 984, in _get_combined_arch
+#     arch = root.with_prefetch(tree_views._prefetch_ids)._combine(hierarchy)
+#    File "/home/odoo/src/odoo/15.0/odoo/addons/base/models/ir_ui_view.py", line 925, in _combine
+#     combined_arch = view.apply_inheritance_specs(combined_arch, arch)
+#    File "/home/odoo/src/odoo/15.0/odoo/addons/base/models/ir_ui_view.py", line 862, in apply_inheritance_specs
+#     self._raise_view_error(str(e), specs_tree)
+#    File "/home/odoo/src/odoo/15.0/odoo/addons/base/models/ir_ui_view.py", line 739, in _raise_view_error
+#     raise err from from_exception
+#  ValueError: Element '<xpath expr="//page[@name=&#39;accounting_details&#39;]//field[@name=&#39;date&#39;]">' cannot be located in parent view
+
+
+
+# ('bt_swissdec.menu_department_tree', 3115, 'Employees > Payroll > Employee Payslips', 500):
+#  Traceback (most recent call last):
+#    File "/tmp/tmpcu2evij8/migrations/base/tests/test_mock_crawl.py", line 220, in crawl_menu
+#     self.mock_action(action_vals)
+#    File "/tmp/tmpcu2evij8/migrations/base/tests/test_mock_crawl.py", line 290, in mock_action
+#     views = get_views(
+#    File "/home/odoo/src/odoo/15.0/odoo/models.py", line 1629, in load_views
+#     result['fields_views'] = {
+#    File "/home/odoo/src/odoo/15.0/odoo/models.py", line 1630, in <dictcomp>
+#     v_type: self.fields_view_get(v_id, v_type if v_type != 'list' else 'tree',
+#    File "/home/odoo/src/enterprise/15.0/hr_payroll/models/hr_payslip.py", line 816, in fields_view_get
+#     res = super().fields_view_get(view_id, view_type, toolbar, submenu)
+#    File "/home/odoo/src/odoo/15.0/addons/web/models/models.py", line 249, in fields_view_get
+#     r = super().fields_view_get(view_id, view_type, toolbar, submenu)
+#    File "/home/odoo/src/odoo/15.0/odoo/models.py", line 1713, in fields_view_get
+#     result = self._fields_view_get(view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu)
+#    File "/home/odoo/src/odoo/15.0/odoo/models.py", line 1675, in _fields_view_get
+#     result['arch'] = view.get_combined_arch()
+#    File "/home/odoo/src/odoo/15.0/odoo/addons/base/models/ir_ui_view.py", line 954, in get_combined_arch
+#     return etree.tostring(self._get_combined_arch(), encoding='unicode')
+#    File "/home/odoo/src/odoo/15.0/odoo/addons/base/models/ir_ui_view.py", line 984, in _get_combined_arch
+#     arch = root.with_prefetch(tree_views._prefetch_ids)._combine(hierarchy)
+#    File "/home/odoo/src/odoo/15.0/odoo/addons/base/models/ir_ui_view.py", line 925, in _combine
+#     combined_arch = view.apply_inheritance_specs(combined_arch, arch)
+#    File "/home/odoo/src/odoo/15.0/odoo/addons/base/models/ir_ui_view.py", line 862, in apply_inheritance_specs
+#     self._raise_view_error(str(e), specs_tree)
+#    File "/home/odoo/src/odoo/15.0/odoo/addons/base/models/ir_ui_view.py", line 739, in _raise_view_error
+#     raise err from from_exception
+#  ValueError: Element '<xpath expr="//page[@name=&#39;accounting_details&#39;]//field[@name=&#39;date&#39;]">' cannot be located in parent view
+
+
+# ('hr_payroll.menu_hr_payroll_employee_payslips_to_pay', 4177, 'Payroll > Payslips > To Pay', 2953):
+#  Traceback (most recent call last):
+#    File "/tmp/tmpcu2evij8/migrations/base/tests/test_mock_crawl.py", line 220, in crawl_menu
+#     self.mock_action(action_vals)
+#    File "/tmp/tmpcu2evij8/migrations/base/tests/test_mock_crawl.py", line 290, in mock_action
+#     views = get_views(
+#    File "/home/odoo/src/odoo/15.0/odoo/models.py", line 1629, in load_views
+#     result['fields_views'] = {
+#    File "/home/odoo/src/odoo/15.0/odoo/models.py", line 1630, in <dictcomp>
+#     v_type: self.fields_view_get(v_id, v_type if v_type != 'list' else 'tree',
+#    File "/home/odoo/src/enterprise/15.0/hr_payroll/models/hr_payslip.py", line 816, in fields_view_get
+#     res = super().fields_view_get(view_id, view_type, toolbar, submenu)
+#    File "/home/odoo/src/odoo/15.0/addons/web/models/models.py", line 249, in fields_view_get
+#     r = super().fields_view_get(view_id, view_type, toolbar, submenu)
+#    File "/home/odoo/src/odoo/15.0/odoo/models.py", line 1713, in fields_view_get
+#     result = self._fields_view_get(view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu)
+#    File "/home/odoo/src/odoo/15.0/odoo/models.py", line 1675, in _fields_view_get
+#     result['arch'] = view.get_combined_arch()
+#    File "/home/odoo/src/odoo/15.0/odoo/addons/base/models/ir_ui_view.py", line 954, in get_combined_arch
+#     return etree.tostring(self._get_combined_arch(), encoding='unicode')
+#    File "/home/odoo/src/odoo/15.0/odoo/addons/base/models/ir_ui_view.py", line 984, in _get_combined_arch
+#     arch = root.with_prefetch(tree_views._prefetch_ids)._combine(hierarchy)
+#    File "/home/odoo/src/odoo/15.0/odoo/addons/base/models/ir_ui_view.py", line 925, in _combine
+#     combined_arch = view.apply_inheritance_specs(combined_arch, arch)
+#    File "/home/odoo/src/odoo/15.0/odoo/addons/base/models/ir_ui_view.py", line 862, in apply_inheritance_specs
+#     self._raise_view_error(str(e), specs_tree)
+#    File "/home/odoo/src/odoo/15.0/odoo/addons/base/models/ir_ui_view.py", line 739, in _raise_view_error
+#     raise err from from_exception
+#  ValueError: Element '<xpath expr="//page[@name=&#39;accounting_details&#39;]//field[@name=&#39;date&#39;]">' cannot be located in parent view
+=======================================================================================
+
+BLOCKING ERROR 2
+=======================================================================================
+2022-09-21 13:43:09,951 10867 ERROR fsch_test_test_15.0_2022_09_20_10_24 odoo.sql_db: bad query: ALTER TABLE "res_partner_mail_mail_rel" ADD FOREIGN KEY ("mail_id") REFERENCES "mail_mail"("id") ON DELETE cascade
+ERROR: insert or update on table "res_partner_mail_mail_rel" violates foreign key constraint "res_partner_mail_mail_rel_mail_id_fkey"
+DETAIL:  Key (mail_id)=(328457) is not present in table "mail_mail".
+
+2022-09-21 13:43:09,958 10867 WARNING fsch_test_test_15.0_2022_09_20_10_24 odoo.modules.loading: Transient module states were reset
+2022-09-21 13:43:09,961 10867 ERROR fsch_test_test_15.0_2022_09_20_10_24 odoo.modules.registry: Failed to load registry
+2022-09-21 13:43:09,961 10867 CRITICAL fsch_test_test_15.0_2022_09_20_10_24 odoo.service.server: Failed to initialize database `fsch_test_test_15.0_2022_09_20_10_24`.
+Traceback (most recent call last):
+  File "/opt/odoo/git_repositories/odoo/odoo/service/server.py", line 1260, in preload_registries
+    registry = Registry.new(dbname, update_module=update_module)
+  File "/opt/odoo/git_repositories/odoo/odoo/modules/registry.py", line 87, in new
+    odoo.modules.load_modules(registry, force_demo, status, update_module)
+  File "/opt/odoo/git_repositories/odoo/odoo/modules/loading.py", line 470, in load_modules
+    processed_modules += load_marked_modules(cr, graph,
+  File "/opt/odoo/git_repositories/odoo/odoo/modules/loading.py", line 363, in load_marked_modules
+    loaded, processed = load_module_graph(
+  File "/opt/odoo/git_repositories/odoo/odoo/modules/loading.py", line 199, in load_module_graph
+    registry.init_models(cr, model_names, {'module': package.name}, new_install)
+  File "/opt/odoo/git_repositories/odoo/odoo/modules/registry.py", line 442, in init_models
+    self.check_foreign_keys(cr)
+  File "/opt/odoo/git_repositories/odoo/odoo/modules/registry.py", line 519, in check_foreign_keys
+    sql.add_foreign_key(cr, table1, column1, table2, column2, ondelete)
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/sql.py", line 170, in add_foreign_key
+    cr.execute(query.format(tablename1, columnname1, tablename2, columnname2, ondelete))
+  File "<decorator-gen-3>", line 2, in execute
+  File "/opt/odoo/git_repositories/odoo/odoo/sql_db.py", line 90, in check
+    return f(self, *args, **kwargs)
+  File "/opt/odoo/git_repositories/odoo/odoo/sql_db.py", line 313, in execute
+    res = self._obj.execute(query, params)
+psycopg2.errors.ForeignKeyViolation: insert or update on table "res_partner_mail_mail_rel" violates foreign key constraint "res_partner_mail_mail_rel_mail_id_fkey"
+DETAIL:  Key (mail_id)=(328457) is not present in table "mail_mail".
+
+FIXED WITH
+=====================
+fsch_test_test_15.0_2022_09_20_10_24=# DELETE FROM res_partner_mail_mail_rel WHERE mail_id IN (select rpmm.mail_id from res_partner_mail_mail_rel rpmm LEFT JOIN mail_mail m ON rpmm.mail_id = m.id WHERE m.id IS NULL);
+DELETE 989
+
+FIXED WITH
+=====================
+fsch_test_test_15.0_2022_09_20_10_24=# DELETE FROM res_partner_mail_mail_rel WHERE partner_id IN (select rpmm.partner_id from res_partner_mail_mail_rel rpmm LEFT JOIN res_partner p ON rpmm.partner_id = p.id WHERE p.id IS NULL);
+DELETE 989
+
+BLOCKING ERROR 3
+=======================================================
+
+2022-09-22 06:20:18,374 40247 ERROR fsch_test_test_15.0_2022_09_20_10_24 odoo.modules.registry: Failed to load registry 
+2022-09-22 06:20:18,374 40247 CRITICAL fsch_test_test_15.0_2022_09_20_10_24 odoo.service.server: Failed to initialize database `fsch_test_test_15.0_2022_09_20_10_24`. 
+Traceback (most recent call last):
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/convert.py", line 680, in _tag_root
+    f(rec)
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/convert.py", line 583, in _tag_record
+    record = model._load_records([data], self.mode == 'update')
+  File "/opt/odoo/git_repositories/odoo/odoo/models.py", line 4417, in _load_records
+    records = self._load_records_create([data['values'] for data in to_create])
+  File "/opt/odoo/git_repositories/odoo/odoo/models.py", line 4338, in _load_records_create
+    return self.create(values)
+  File "<decorator-gen-134>", line 2, in create
+  File "/opt/odoo/git_repositories/odoo/odoo/api.py", line 413, in _model_create_multi
+    return create(self, arg)
+  File "/opt/odoo/git_repositories/odoo/addons/mail/models/mail_notification.py", line 71, in create
+    return super(MailNotification, self).create(vals_list)
+  File "<decorator-gen-67>", line 2, in create
+  File "/opt/odoo/git_repositories/odoo/odoo/api.py", line 413, in _model_create_multi
+    return create(self, arg)
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_fields.py", line 613, in create
+    recs = super().create(vals_list)
+  File "<decorator-gen-13>", line 2, in create
+  File "/opt/odoo/git_repositories/odoo/odoo/api.py", line 413, in _model_create_multi
+    return create(self, arg)
+  File "/opt/odoo/git_repositories/odoo/odoo/models.py", line 4070, in create
+    records = self._create(data_list)
+  File "/opt/odoo/git_repositories/odoo/odoo/models.py", line 4168, in _create
+    cr.execute(query, params)
+  File "<decorator-gen-3>", line 2, in execute
+  File "/opt/odoo/git_repositories/odoo/odoo/sql_db.py", line 90, in check
+    return f(self, *args, **kwargs)
+  File "/opt/odoo/git_repositories/odoo/odoo/sql_db.py", line 313, in execute
+    res = self._obj.execute(query, params)
+psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "mail_message_res_partner_need_mail_message_id_res_partner_i_key"
+DETAIL:  Key (mail_message_id, res_partner_id)=(2848095, 1) already exists.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/odoo/git_repositories/odoo/odoo/service/server.py", line 1260, in preload_registries
+    registry = Registry.new(dbname, update_module=update_module)
+  File "/opt/odoo/git_repositories/odoo/odoo/modules/registry.py", line 87, in new
+    odoo.modules.load_modules(registry, force_demo, status, update_module)
+  File "/opt/odoo/git_repositories/odoo/odoo/modules/loading.py", line 470, in load_modules
+    processed_modules += load_marked_modules(cr, graph,
+  File "/opt/odoo/git_repositories/odoo/odoo/modules/loading.py", line 363, in load_marked_modules
+    loaded, processed = load_module_graph(
+  File "/opt/odoo/git_repositories/odoo/odoo/modules/loading.py", line 222, in load_module_graph
+    load_data(cr, idref, mode, kind='data', package=package)
+  File "/opt/odoo/git_repositories/odoo/odoo/modules/loading.py", line 69, in load_data
+    tools.convert_file(cr, package.name, filename, idref, mode, noupdate, kind)
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/convert.py", line 745, in convert_file
+    convert_xml_import(cr, module, fp, idref, mode, noupdate)
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/convert.py", line 811, in convert_xml_import
+    obj.parse(doc.getroot())
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/convert.py", line 731, in parse
+    self._tag_root(de)
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/convert.py", line 680, in _tag_root
+    f(rec)
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/convert.py", line 693, in _tag_root
+    raise ParseError('while parsing %s:%s, somewhere inside\n%s' % (
+odoo.tools.convert.ParseError: while parsing /opt/odoo/git_repositories/fernuni/mail_partner_collect/data/demo/mail_mail.xml:37, somewhere inside
+<record id="message_demo_notification" model="mail.notification">
+            <field name="mail_message_id" ref="message_demo_mail_message"/>
+            <field name="res_partner_id" ref="base.partner_admin"/>
+            <field name="notification_type">email</field>
+            <field name="notification_status">exception</field>
+            <field name="failure_type">mail_smtp</field>
+        </record>
+
+ISSUE (Recomputing all theoretical hours -again-)
+================
+2022-09-22 08:20:15,746 43302 INFO fsch_test_test_15.0_2022_09_20_10_24 odoo.modules.loading: Loading module hr_attendance_report_theoretical_time (99/223) 
+2022-09-22 08:20:16,056 43302 INFO fsch_test_test_15.0_2022_09_20_10_24 odoo.modules.registry: module hr_attendance_report_theoretical_time: creating or updating database tables 
+2022-09-22 08:20:16,061 43302 DEBUG fsch_test_test_15.0_2022_09_20_10_24 odoo.schema: Table 'hr_attendance': added column 'theoretical_hours' of type double precision 
+2022-09-22 08:20:16,339 43302 INFO fsch_test_test_15.0_2022_09_20_10_24 odoo.models: Storing computed values of hr.attendance.theoretical_hours 
+
+
+ISSUE 
+=====================================
+
+2022-09-22 08:49:39,527 43302 DEBUG fsch_test_test_15.0_2022_09_20_10_24 odoo.tools.convert: while parsing /opt/odoo/git_repositories/fernuni/fsch_customer/view/res_user_view_ext.xml:33
+Error while validating view near:
+
+                    <div class="o_row">
+                        <field name="lang" readonly="0"/>
+                        <button type="action" name="55" class="btn-sm btn-link mb4 fa fa-globe" aria-label="More languages" title="More languages"/>
+                    </div>
+                    <field name="tz" widget="timezone_mismatch" options="{'tz_offset_field': 'tz_offset'}" readonly="0" invisible="1"/>
+
+Action 55 (id: 55) does not exist for button of type action.
+
+View error context:
+{'file': '/opt/odoo/git_repositories/fernuni/fsch_customer/view/res_user_view_ext.xml',
+ 'line': 20,
+ 'name': 'res.users.preferences.form.resource.inherit',
+ 'view': ir.ui.view(6010,),
+ 'view.model': 'res.users',
+ 'view.parent': ir.ui.view(4600,),
+ 'xmlid': 'view_users_form_simple_modif_resource_inherit'}
+ 
+Traceback (most recent call last):
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/convert.py", line 680, in _tag_root
+    f(rec)
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/convert.py", line 583, in _tag_record
+    record = model._load_records([data], self.mode == 'update')
+  File "/opt/odoo/git_repositories/odoo/odoo/models.py", line 4406, in _load_records
+    data['record']._load_records_write(data['values'])
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_ui_view.py", line 2115, in _load_records_write
+    super(View, self)._load_records_write(values)
+  File "/opt/odoo/git_repositories/odoo/odoo/models.py", line 4335, in _load_records_write
+    self.write(values)
+  File "/opt/odoo/git_repositories/odoo/addons/website/models/theme_models.py", line 361, in write
+    res = super(IrUiView, other_views).write(vals)
+  File "/opt/odoo/git_repositories/odoo/addons/website/models/ir_ui_view.py", line 95, in write
+    return super(View, self).write(vals)
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_ui_view.py", line 558, in write
+    res = super(View, self).write(self._compute_defaults(vals))
+  File "/opt/odoo/git_repositories/odoo/odoo/models.py", line 3890, in write
+    fields[0].determine_inverse(real_recs)
+  File "/opt/odoo/git_repositories/odoo/odoo/fields.py", line 1275, in determine_inverse
+    getattr(records, self.inverse)()
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_ui_view.py", line 331, in _inverse_arch
+    view.write(data)
+  File "/opt/odoo/git_repositories/odoo/addons/website/models/theme_models.py", line 361, in write
+    res = super(IrUiView, other_views).write(vals)
+  File "/opt/odoo/git_repositories/odoo/addons/website/models/ir_ui_view.py", line 95, in write
+    return super(View, self).write(vals)
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_ui_view.py", line 558, in write
+    res = super(View, self).write(self._compute_defaults(vals))
+  File "/opt/odoo/git_repositories/odoo/odoo/models.py", line 3880, in write
+    real_recs._validate_fields(vals, inverse_fields)
+  File "/opt/odoo/git_repositories/odoo/odoo/models.py", line 1367, in _validate_fields
+    check(self)
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_ui_view.py", line 460, in _check_xml
+    raise err.with_traceback(e.__traceback__) from None
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_ui_view.py", line 434, in _check_xml
+    view._validate_view(combined_arch, view.model)
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_ui_view.py", line 1292, in _validate_view
+    validator(node, name_manager, node_info)
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_ui_view.py", line 1486, in _validate_tag_button
+    self._raise_view_error(msg, node)
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_ui_view.py", line 739, in _raise_view_error
+    raise err from from_exception
+odoo.exceptions.ValidationError: Error while validating view near:
+
+                    <div class="o_row">
+                        <field name="lang" readonly="0"/>
+                        <button type="action" name="55" class="btn-sm btn-link mb4 fa fa-globe" aria-label="More languages" title="More languages"/>
+                    </div>
+                    <field name="tz" widget="timezone_mismatch" options="{'tz_offset_field': 'tz_offset'}" readonly="0" invisible="1"/>
+
+Action 55 (id: 55) does not exist for button of type action.
+2022-09-22 08:49:39,625 43302 WARNING fsch_test_test_15.0_2022_09_20_10_24 odoo.modules.loading: Transient module states were reset 
+2022-09-22 08:49:39,628 43302 ERROR fsch_test_test_15.0_2022_09_20_10_24 odoo.modules.registry: Failed to load registry 
+2022-09-22 08:49:39,628 43302 CRITICAL fsch_test_test_15.0_2022_09_20_10_24 odoo.service.server: Failed to initialize database `fsch_test_test_15.0_2022_09_20_10_24`. 
+Traceback (most recent call last):
+  File "/opt/odoo/git_repositories/odoo/odoo/service/server.py", line 1260, in preload_registries
+    registry = Registry.new(dbname, update_module=update_module)
+  File "/opt/odoo/git_repositories/odoo/odoo/modules/registry.py", line 87, in new
+    odoo.modules.load_modules(registry, force_demo, status, update_module)
+  File "/opt/odoo/git_repositories/odoo/odoo/modules/loading.py", line 470, in load_modules
+    processed_modules += load_marked_modules(cr, graph,
+  File "/opt/odoo/git_repositories/odoo/odoo/modules/loading.py", line 363, in load_marked_modules
+    loaded, processed = load_module_graph(
+  File "/opt/odoo/git_repositories/odoo/odoo/modules/loading.py", line 222, in load_module_graph
+    load_data(cr, idref, mode, kind='data', package=package)
+  File "/opt/odoo/git_repositories/odoo/odoo/modules/loading.py", line 69, in load_data
+    tools.convert_file(cr, package.name, filename, idref, mode, noupdate, kind)
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/convert.py", line 745, in convert_file
+    convert_xml_import(cr, module, fp, idref, mode, noupdate)
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/convert.py", line 811, in convert_xml_import
+    obj.parse(doc.getroot())
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/convert.py", line 731, in parse
+    self._tag_root(de)
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/convert.py", line 680, in _tag_root
+    f(rec)
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/convert.py", line 691, in _tag_root
+    raise ParseError(msg) from None  # Restart with "--log-handler odoo.tools.convert:DEBUG" for complete traceback
+odoo.tools.convert.ParseError: while parsing /opt/odoo/git_repositories/fernuni/fsch_customer/view/res_user_view_ext.xml:33
+Error while validating view near:
+
+                    <div class="o_row">
+                        <field name="lang" readonly="0"/>
+                        <button type="action" name="55" class="btn-sm btn-link mb4 fa fa-globe" aria-label="More languages" title="More languages"/>
+                    </div>
+                    <field name="tz" widget="timezone_mismatch" options="{'tz_offset_field': 'tz_offset'}" readonly="0" invisible="1"/>
+
+Action 55 (id: 55) does not exist for button of type action.
+
+View error context:
+{'file': '/opt/odoo/git_repositories/fernuni/fsch_customer/view/res_user_view_ext.xml',
+ 'line': 20,
+ 'name': 'res.users.preferences.form.resource.inherit',
+ 'view': ir.ui.view(6010,),
+ 'view.model': 'res.users',
+ 'view.parent': ir.ui.view(4600,),
+ 'xmlid': 'view_users_form_simple_modif_resource_inherit'}
+
+
+ISSUE CONTACT US WEBSITE.LAYOUT TEMPLATE
+=====================================
+
+022-09-22 14:19:49,102 54837 ERROR fsch_test_test_15.0_2022_09_20_10_24 werkzeug: Error on request:
+Traceback (most recent call last):
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/cache.py", line 85, in lookup
+    r = d[key]
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/func.py", line 71, in wrapper
+    return func(self, *args, **kwargs)
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/lru.py", line 34, in __getitem__
+    a = self.d[obj]
+KeyError: ('ir.qweb', <function IrQWeb._generate_asset_nodes_cache at 0x7f9b1b989ee0>, 'web.assets_backend', True, False, '', False, False, False, (None, 'en_US'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/cache.py", line 85, in lookup
+    r = d[key]
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/func.py", line 71, in wrapper
+    return func(self, *args, **kwargs)
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/lru.py", line 34, in __getitem__
+    a = self.d[obj]
+KeyError: ('ir.qweb', <function IrQWeb._get_asset_content at 0x7f9b1b9981f0>, 'web.assets_backend', None, False, False, (None, 'en_US'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/qweb.py", line 219, in render_template
+    yield from compiled_fn(self, values, log)
+  File "<template_2153>", line 144, in template_2153
+    
+  File "<template_2153>", line 135, in t_call_content
+    
+  File "<template_2153>", line 39, in qweb_t_set__t_t_t_1_
+    
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_qweb.py", line 246, in _get_asset_nodes
+    return self._generate_asset_nodes_cache(bundle, css, js, debug, async_load, defer_load, lazy_load, media)
+  File "<decorator-gen-69>", line 2, in _generate_asset_nodes_cache
+    
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/cache.py", line 90, in lookup
+    value = d[key] = self.method(*args, **kwargs)
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_qweb.py", line 255, in _generate_asset_nodes_cache
+    return self._generate_asset_nodes(bundle, css, js, debug, async_load, defer_load, lazy_load, media)
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_qweb.py", line 263, in _generate_asset_nodes
+    files, remains = self._get_asset_content(bundle, nodeAttrs, defer_load=defer_load, lazy_load=lazy_load)
+  File "<decorator-gen-70>", line 2, in _get_asset_content
+    
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/cache.py", line 90, in lookup
+    value = d[key] = self.method(*args, **kwargs)
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_qweb.py", line 274, in _get_asset_content
+    asset_paths = self.env['ir.asset']._get_asset_paths(bundle=bundle, css=True, js=True)
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_asset.py", line 123, in _get_asset_paths
+    self._fill_asset_paths(bundle, addons, installed, css, js, xml, asset_paths, [])
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_asset.py", line 222, in _fill_asset_paths
+    process_path(asset.directive, asset.target, asset.path)
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_asset.py", line 203, in process_path
+    raise ValueError("Unexpected directive")
+ValueError: Unexpected directive
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_http.py", line 237, in _dispatch
+    result = request.dispatch()
+  File "/opt/odoo/git_repositories/odoo/odoo/http.py", line 810, in dispatch
+    r = self._call_function(**self.params)
+  File "/opt/odoo/git_repositories/odoo/odoo/http.py", line 359, in _call_function
+    return checked_call(self.db, *args, **kwargs)
+  File "/opt/odoo/git_repositories/odoo/odoo/service/model.py", line 94, in wrapper
+    return f(dbname, *args, **kwargs)
+  File "/opt/odoo/git_repositories/odoo/odoo/http.py", line 351, in checked_call
+    result.flatten()
+  File "/opt/odoo/git_repositories/odoo/odoo/http.py", line 1277, in flatten
+    self.response.append(self.render())
+  File "/opt/odoo/git_repositories/odoo/odoo/http.py", line 1270, in render
+    return env["ir.ui.view"]._render_template(self.template, self.qcontext)
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_ui_view.py", line 1985, in _render_template
+    return self.browse(self.get_view_id(template))._render(values, engine)
+  File "/opt/odoo/git_repositories/odoo/addons/website/models/ir_ui_view.py", line 436, in _render
+    return super(View, self)._render(values, engine=engine, minimal_qcontext=minimal_qcontext)
+  File "/opt/odoo/git_repositories/odoo/addons/web_editor/models/ir_ui_view.py", line 29, in _render
+    return super(IrUiView, self)._render(values=values, engine=engine, minimal_qcontext=minimal_qcontext)
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_ui_view.py", line 1993, in _render
+    return self.env[engine]._render(self.id, qcontext)
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/profiler.py", line 292, in _tracked_method_render
+    return method_render(self, template, values, **options)
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_qweb.py", line 76, in _render
+    result = super()._render(template, values=values, **compile_options)
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/qweb.py", line 134, in _render
+    result = ''.join(rendering)
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/qweb.py", line 223, in render_template
+    raise QWebException("Error when render the template", self, options,
+Exception
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/odoo/.local/lib/python3.9/site-packages/werkzeug/serving.py", line 306, in run_wsgi
+    execute(self.server.app)
+  File "/opt/odoo/.local/lib/python3.9/site-packages/werkzeug/serving.py", line 294, in execute
+    application_iter = app(environ, start_response)
+  File "/opt/odoo/git_repositories/odoo/odoo/service/wsgi_server.py", line 110, in application
+    return ProxyFix(application_unproxied)(environ, start_response)
+  File "/opt/odoo/.local/lib/python3.9/site-packages/werkzeug/middleware/proxy_fix.py", line 232, in __call__
+    return self.app(environ, start_response)
+  File "/opt/odoo/git_repositories/odoo/odoo/service/wsgi_server.py", line 87, in application_unproxied
+    result = odoo.http.root(environ, start_response)
+  File "/opt/odoo/git_repositories/odoo/odoo/http.py", line 1336, in __call__
+    return self.dispatch(environ, start_response)
+  File "/opt/odoo/git_repositories/odoo/odoo/http.py", line 1302, in __call__
+    return self.app(environ, start_wrapped)
+  File "/opt/odoo/.local/lib/python3.9/site-packages/werkzeug/middleware/shared_data.py", line 220, in __call__
+    return self.app(environ, start_response)
+  File "/opt/odoo/git_repositories/odoo/odoo/http.py", line 1531, in dispatch
+    result = ir_http._dispatch()
+  File "/opt/odoo/git_repositories/odoo/addons/website/models/ir_http.py", line 198, in _dispatch
+    response = super(Http, cls)._dispatch()
+  File "/opt/odoo/git_repositories/odoo/addons/auth_signup/models/ir_http.py", line 19, in _dispatch
+    return super(Http, cls)._dispatch()
+  File "/opt/odoo/git_repositories/odoo/addons/web_editor/models/ir_http.py", line 21, in _dispatch
+    return super(IrHttp, cls)._dispatch()
+  File "/opt/odoo/git_repositories/odoo/addons/utm/models/ir_http.py", line 29, in _dispatch
+    response = super(IrHttp, cls)._dispatch()
+  File "/opt/odoo/git_repositories/odoo/addons/http_routing/models/ir_http.py", line 519, in _dispatch
+    result = super(IrHttp, cls)._dispatch()
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_http.py", line 241, in _dispatch
+    return cls._handle_exception(e)
+  File "/opt/odoo/git_repositories/odoo/addons/utm/models/ir_http.py", line 34, in _handle_exception
+    response = super(IrHttp, cls)._handle_exception(exc)
+  File "/opt/odoo/git_repositories/odoo/addons/http_routing/models/ir_http.py", line 620, in _handle_exception
+    return super(IrHttp, cls)._handle_exception(exception)
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_http.py", line 209, in _handle_exception
+    return request._handle_exception(exception)
+  File "/opt/odoo/git_repositories/odoo/odoo/http.py", line 748, in _handle_exception
+    return super(HttpRequest, self)._handle_exception(exception)
+  File "/opt/odoo/git_repositories/odoo/odoo/http.py", line 301, in _handle_exception
+    raise exception.with_traceback(None) from new_cause
+odoo.addons.base.models.qweb.QWebException: Unexpected directive
+Traceback (most recent call last):
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/cache.py", line 85, in lookup
+    r = d[key]
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/func.py", line 71, in wrapper
+    return func(self, *args, **kwargs)
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/lru.py", line 34, in __getitem__
+    a = self.d[obj]
+KeyError: ('ir.qweb', <function IrQWeb._generate_asset_nodes_cache at 0x7f9b1b989ee0>, 'web.assets_backend', True, False, '', False, False, False, (None, 'en_US'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/cache.py", line 85, in lookup
+    r = d[key]
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/func.py", line 71, in wrapper
+    return func(self, *args, **kwargs)
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/lru.py", line 34, in __getitem__
+    a = self.d[obj]
+KeyError: ('ir.qweb', <function IrQWeb._get_asset_content at 0x7f9b1b9981f0>, 'web.assets_backend', None, False, False, (None, 'en_US'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/qweb.py", line 219, in render_template
+    yield from compiled_fn(self, values, log)
+  File "<template_2153>", line 144, in template_2153
+  File "<template_2153>", line 135, in t_call_content
+  File "<template_2153>", line 39, in qweb_t_set__t_t_t_1_
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_qweb.py", line 246, in _get_asset_nodes
+    return self._generate_asset_nodes_cache(bundle, css, js, debug, async_load, defer_load, lazy_load, media)
+  File "<decorator-gen-69>", line 2, in _generate_asset_nodes_cache
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/cache.py", line 90, in lookup
+    value = d[key] = self.method(*args, **kwargs)
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_qweb.py", line 255, in _generate_asset_nodes_cache
+    return self._generate_asset_nodes(bundle, css, js, debug, async_load, defer_load, lazy_load, media)
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_qweb.py", line 263, in _generate_asset_nodes
+    files, remains = self._get_asset_content(bundle, nodeAttrs, defer_load=defer_load, lazy_load=lazy_load)
+  File "<decorator-gen-70>", line 2, in _get_asset_content
+  File "/opt/odoo/git_repositories/odoo/odoo/tools/cache.py", line 90, in lookup
+    value = d[key] = self.method(*args, **kwargs)
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_qweb.py", line 274, in _get_asset_content
+    asset_paths = self.env['ir.asset']._get_asset_paths(bundle=bundle, css=True, js=True)
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_asset.py", line 123, in _get_asset_paths
+    self._fill_asset_paths(bundle, addons, installed, css, js, xml, asset_paths, [])
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_asset.py", line 222, in _fill_asset_paths
+    process_path(asset.directive, asset.target, asset.path)
+  File "/opt/odoo/git_repositories/odoo/odoo/addons/base/models/ir_asset.py", line 203, in process_path
+    raise ValueError("Unexpected directive")
+ValueError: Unexpected directive
+
+Error when render the template
+ValueError: Unexpected directive
+Template: 2153
+Path: /t/t/t[1]/t[2]
+Node: <t t-call-assets="web.assets_backend" t-js="false"/> - - -
+

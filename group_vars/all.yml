@@ -15,4 +15,4 @@ odoo_postgresql_extensions:
 ansible_python_interpreter: /usr/bin/python3
 
 # SITE
-site_name: your-site.com
+site_name: campus.fernuni.ch

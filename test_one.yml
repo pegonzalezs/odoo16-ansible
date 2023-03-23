@@ -1,0 +1,19 @@
+- hosts: campus
+  become: true
+  become_method: sudo
+  remote_user: administrator
+  tasks:
+    # Get last backup name
+    - name: Get last backup name
+      ansible.builtin.command: ssh -p 2222 administrator@campus.fernuni.ch "sudo ls -Art /var/lib/pgsql/9.5/backups | tail -n 1"
+      register: backup_file
+      become: true
+      become_user: administrator
+
+    - name: Build rsync command to download file {{ backup_file.stdout }}
+      ansible.builtin.set_fact:
+        rsync_cmd: >
+          rsync -av --ignore-existing -e 'ssh -p 2222' --progress
+          administrator@campus.fernuni.ch:/var/lib/pgsql/9.5/backups/ /opt/odoo/backups
+      become: true
+      become_user: administrator
